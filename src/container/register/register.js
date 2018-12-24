@@ -10,7 +10,7 @@ class Register extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            userName: '',
+            user: '',
             pwd: '',
             confirmPwd: '',
             type: 'genuis'
@@ -31,7 +31,7 @@ class Register extends React.Component{
                 <WingBlank>
                     <List>
                         <InputItem
-                            onChange={v => this.handleChange('userName', v)}
+                            onChange={v => this.handleChange('user', v)}
                         >用户名</InputItem>
                         <WhiteSpace/>
                         <InputItem
