@@ -2,6 +2,7 @@ import React from 'react';
 import { connect} from 'react-redux';
 import { InputItem, List, WingBlank, WhiteSpace, Button, Radio } from 'antd-mobile';
 import { register } from '../../redux/user.redux';
+import { Redirect } from 'react-router-dom';
 import Logo from '../../component/logo';
 
 const RadioItem = Radio.RadioItem;
@@ -25,8 +26,10 @@ class Register extends React.Component{
         this.props.registerFn(this.state);
     }
     render(){
+        const { redictPath } = this.props.user;
         return (
             <React.Fragment>
+                {redictPath ? <Redirect to={redictPath}/>: null}
                 <Logo/>
                 <WingBlank>
                     <List>
@@ -47,8 +50,8 @@ class Register extends React.Component{
                         <RadioItem checked={this.state.type === 'genuis'}
                             onChange={() => this.handleChange('type', 'genuis')}
                         >求职者</RadioItem>
-                        <RadioItem checked={this.state.type === 'employer'}
-                            onChange={() => this.handleChange('type', 'employer')}
+                        <RadioItem checked={this.state.type === 'boss'}
+                            onChange={() => this.handleChange('type', 'boss')}
                         >招聘者</RadioItem>
                     </List>
                     {/* <WhiteSpace/>

@@ -13,7 +13,8 @@ class AuthRouter extends React.Component{
         }
         axios.get('/user/info').then(res => {
             if (res.status === 200) {
-                if (res.data.code === 1) {
+                // 踩过坑  code应该为0
+                if (res.data.code === 0) {
                     // 有登陆信息
                 } else {
                     this.props.history.push('/login')
