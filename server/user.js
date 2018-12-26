@@ -36,11 +36,14 @@ Router.post('/register', function(req, res) {
         if(doc) {
             return res.json({code: 1, mes: '用户名已存在'})
         }
-        User.create({user, type, pwd: md5Fun(pwd)}, function(err, doc){
-            if(err) {
+        const userModel = new User({user, type, pwd: md5Fun(pwd)});
+        userModel.save(function(err, doc) {
+            if (err) {
                 return res.json({code: 1, mes: '后端出错了'})
             }
-            return res.json({code: 0, })
+            const {user, _id, type} = doc;
+            res.cookie('userid', _id);
+            return res.json({code: 0, data: {user, _id, type}})
         })
     })
     // return res.json({"code": 1})

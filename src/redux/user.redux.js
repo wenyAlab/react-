@@ -10,7 +10,6 @@ const initState = {
     redictPath: '',
     isAuth: false,
     user: '',
-    pwd: '',
     type: '',
 }
 // reducer
@@ -79,20 +78,26 @@ export function login({user, pwd}) {
         })
     }
 }
-// export function userload({user, pwd}) {
-//     if (!user || !pwd) {
-//         return errorMsg('用户名或密码错误')
-//     }
-//     return (dispatch) => {
-//         axios.get('/user/info').then(res => {
-//             if (res.status === 200) {
-//                 // 踩过坑  code应该为0
-//                 if (res.data.code === 0) {
-//                     // 有登陆信息
-//                 } else {
-//                     this.props.history.push('/login')
-//                 }
-//             }
-//         })
-//     }
-// }
+export function UserInfo(userInfo) {
+    return { 
+        type: USER_DATA,
+        payload: userInfo,
+    }
+}
+export function userload({user, pwd}) {
+    if (!user || !pwd) {
+        return errorMsg('用户名或密码错误')
+    }
+    return (dispatch) => {
+        axios.get('/user/info').then(res => {
+            if (res.status === 200) {
+                // 踩过坑  code应该为0
+                if (res.data.code === 0) {
+                    // 有登陆信息
+                } else {
+                    this.props.history.push('/login')
+                }
+            }
+        })
+    }
+}
