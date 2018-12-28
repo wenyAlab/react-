@@ -4,6 +4,7 @@ const LOGIN_SUCCESS = 'USER_LOGIN';
 const REGISTER_SUCESS = 'REGISTER_SUCESS';
 const ERROR_MSG = 'ERROR_MSG';
 const USER_DATA = 'USER_DATA';
+const AVATAR_SELECT = 'AVATAR_SELECT';
 
 const initState = {
     mes: '',
@@ -11,6 +12,7 @@ const initState = {
     isAuth: false,
     user: '',
     type: '',
+    avatar: '',
 }
 // reducer
 export function user(state=initState, action){
@@ -23,6 +25,8 @@ export function user(state=initState, action){
             return {...state, mes: action.payload, isAuth: false}    
         case USER_DATA:
             return {...state, ...action.payload}    
+        case AVATAR_SELECT:
+            return {...state, avatar: action.payload}    
         default:
             return state;
     }
@@ -99,5 +103,12 @@ export function userload({user, pwd}) {
                 }
             }
         })
+    }
+}
+
+export function avatarSelector (text) {
+    return {
+        type: AVATAR_SELECT,
+        payload: text,
     }
 }
