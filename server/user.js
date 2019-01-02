@@ -60,6 +60,24 @@ Router.post('/login', function(req, res) {
     })
 })
 
+Router.post('/saveinfo', function(req, res) {
+    const { userid } = req.cookies;
+    if (!userid) {
+        return res.json({code: 1})
+    }
+    const body = req.body;
+    User.findByIdAndUpdate(userid, body, function(err, doc) {
+        if (!doc) {
+            return res.json({code: 1, mes: '数据库无此信息，更新失败'})
+        }
+        const data = Object.assign({}, {
+            user: doc.user,
+            type: doc.type,
+        }, body)
+        return res.json({code: 0, data: data})
+    })
+})
+
 function md5Fun (pwd) {
     const salt = 'zheshi_react_13yyyDDDfkdsja_okIl';
     return utils.md5(utils.md5(pwd+salt))

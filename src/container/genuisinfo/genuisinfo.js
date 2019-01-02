@@ -6,14 +6,12 @@ import { toSaveInfo } from '../../redux/user.redux';
 import { Redirect } from 'react-router-dom';
 
 
-class BossInfo extends React.Component{
+class GenuisInfo extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
             job: '',
-            companyName: '',
-            money: '',
-            desc: '',
+            personalDes: '',
             avatar: '',
         }
     }
@@ -37,7 +35,7 @@ class BossInfo extends React.Component{
                 <Icon key="1" type="ellipsis" />,
                 ]}
                 >
-                boss
+                Genuis
                 </NavBar>
                 <AvatarSelector
                     avatarSelectFn={(text) => {
@@ -50,22 +48,15 @@ class BossInfo extends React.Component{
                 {/* <List> */}
                     <InputItem
                         onChange={v => this.handleChange('job', v)}
-                    >招聘职位</InputItem>
-                    <WhiteSpace/>
-                    <InputItem
-                        onChange={v => this.handleChange('companyName', v)}
-                    >公司名称</InputItem>
-                    <WhiteSpace/>
-                    <InputItem
-                        onChange={v => this.handleChange('money', v)}
-                    >职位薪资</InputItem>
+                    >求职岗位</InputItem>
                     <WhiteSpace/>
                     <TextareaItem
-                    title="职位要求"
-                        onChange={v => this.handleChange('desc', v)}
+                    title="个人简介"
+                        onChange={v => this.handleChange('personalDes', v)}
                         rows={3}
                         autoHeight
                     />
+                    <WhiteSpace/>
                     <WhiteSpace/>
                     <Button
                         type="primary"
@@ -86,4 +77,4 @@ const mapDispatchToProps = dispatch => ({
         dispatch(toSaveInfo(payload))
     }
 })
-export default connect(mapStateToProps,mapDispatchToProps)(BossInfo);
+export default connect(mapStateToProps,mapDispatchToProps)(GenuisInfo);

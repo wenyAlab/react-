@@ -1,7 +1,8 @@
 import React from 'react';
 import { Grid, WhiteSpace, List} from 'antd-mobile';
-import { connect } from 'react-redux';
-import { avatarSelector } from '../../redux/user.redux';
+import PropsTypes from 'prop-types';
+// import { connect } from 'react-redux';
+// import { avatarSelector } from '../../redux/user.redux';
 
 const imgArr = ['girl', 'man', 'pic', 'red', 'green', 'sunke'];
 const data = imgArr.map((_val, i) => ({
@@ -10,6 +11,9 @@ const data = imgArr.map((_val, i) => ({
   }));
 
 class AvatarSelector extends React.Component{
+    static propsTypes = {
+        avatarSelectFn: PropsTypes.func.isRequired,
+    }
     constructor(props) {
         super(props);
         this.state={

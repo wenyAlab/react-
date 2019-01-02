@@ -13,3 +13,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+.am-tab-bar {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+}
+.fix_header .am-navbar {
+  width: 100%;
+  position: fixed;
+  top: 0;
+}

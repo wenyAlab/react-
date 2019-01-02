@@ -14,7 +14,7 @@ class Register extends React.Component{
             user: '',
             pwd: '',
             confirmPwd: '',
-            type: 'genuis'
+            type: 'genius'
         }
     }
     handleChange = (key, value) => {
@@ -47,8 +47,8 @@ class Register extends React.Component{
                         >确认密码</InputItem>
                         <WhiteSpace/>
 
-                        <RadioItem checked={this.state.type === 'genuis'}
-                            onChange={() => this.handleChange('type', 'genuis')}
+                        <RadioItem checked={this.state.type === 'genius'}
+                            onChange={() => this.handleChange('type', 'genius')}
                         >求职者</RadioItem>
                         <RadioItem checked={this.state.type === 'boss'}
                             onChange={() => this.handleChange('type', 'boss')}
