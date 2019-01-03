@@ -3,7 +3,7 @@ import React from 'react';
 class Boss extends React.Component{
     render() {
         return (
-            <div>boss</div>
+            <h2>boss</h2>
         )
     }
 }

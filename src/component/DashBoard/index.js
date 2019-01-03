@@ -5,10 +5,16 @@ import { Switch , Route} from 'react-router-dom';
 import TabBarLink from '../../component/TabBarLink';
 import Boss from '../../container/boss';
 import Genius from '../../container/genius';
-import Message from '../../container/message';
-import Personal from '../../container/personal';
 
-
+// const Genius = () => {
+//     return <h2>Genius</h2>
+// }
+const Message = () => {
+    return <h2>Message</h2>
+}
+const Personal = () => {
+    return <h2>Personal</h2>
+}
 class DashBoard extends React.Component{
     constructor(props){
         super(props);
@@ -57,7 +63,7 @@ class DashBoard extends React.Component{
                 <NavBar mode="light" className="fix_header">
                     {tabList.find(v => v.path === this.props.location.pathname).title}
                 </NavBar>
-                <div style={{marginTop: 45}}>
+                <div style={{marginTop: 10}}>
                     <Switch>
                     {
                         tabList.map(i => (

@@ -6,9 +6,10 @@ const User = model.getModel('user');
 
 const filter = {pwd: 0, _v: 0}
 Router.get('/list', function(req, res) {
-    // User.remove({}, function(err, doc){});
-    User.find({}, function(err, doc){
-        return res.json(doc)
+    const { type } = req.query;
+    // User.deleteOne({user: 'boss'}, function(err, doc){});
+    User.find({type}, function(err, doc){
+        return res.json({code: 0, data: doc})
     })
 })
 Router.get('/info', function(req, res) {
