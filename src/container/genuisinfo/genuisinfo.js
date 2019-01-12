@@ -11,7 +11,7 @@ class GenuisInfo extends React.Component{
         super(props);
         this.state = {
             job: '',
-            personalDes: '',
+            desc: '',
             avatar: '',
         }
     }
@@ -52,7 +52,7 @@ class GenuisInfo extends React.Component{
                     <WhiteSpace/>
                     <TextareaItem
                     title="个人简介"
-                        onChange={v => this.handleChange('personalDes', v)}
+                        onChange={v => this.handleChange('desc', v)}
                         rows={3}
                         autoHeight
                     />

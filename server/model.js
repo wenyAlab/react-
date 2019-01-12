@@ -7,6 +7,7 @@ mongoose.connect(url);
 // mongoose.connection.on('connected', function(){
 //     console.log('success')
 // })
+// 注意： models中的字段名称必须对应，已踩坑，之前返回的数据中一直没有companyName和job，原因是这里字段名写错了
 const models = {
     user: {
         'user': {'type': String, 'require': true},
@@ -17,9 +18,9 @@ const models = {
         // 个人简介
         'desc': {'type': String},
         // 要找的工作
-        'title': {'type': String},
+        'job': {'type': String},
         // 如果为boss 还有两个字段
-        'company': {'type': String},
+        'companyName': {'type': String},
         'money': {'type': String}
     },
     chat: {

@@ -67,6 +67,7 @@ class DashBoard extends React.Component{
                     <Switch>
                     {
                         tabList.map(i => (
+                            // console.log(i.component)
                             <Route key={i.path} path={i.path} component={i.component}></Route>
                         ))
                     }

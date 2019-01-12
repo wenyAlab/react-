@@ -1,9 +1,18 @@
 import React from 'react';
 
+import ListComponent from '../../component/ListComponent'
+
 class Boss extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            list: [],
+        }
+    }
+
     render() {
         return (
-            <h2>boss</h2>
+            <ListComponent type='genius'/>
         )
     }
 }

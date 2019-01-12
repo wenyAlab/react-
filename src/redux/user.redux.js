@@ -1,13 +1,13 @@
 import axios from 'axios';
 import {getRedictPath} from '../util';
-// const LOGIN_SUCCESS = 'USER_LOGIN';
 const AUTH_SUCCESS = 'AUTH_SUCCESS';
-// const REGISTER_SUCESS = 'REGISTER_SUCESS';
 const ERROR_MSG = 'ERROR_MSG';
 const USER_DATA = 'USER_DATA';
 const AVATAR_SELECT = 'AVATAR_SELECT';
-const SAVE_INFO = 'SAVE_INFO';
 
+/**
+ * 此reducer为登录、注册用户reducer
+ */
 const initState = {
     mes: '',
     redictPath: '',
@@ -21,10 +21,6 @@ export function user(state=initState, action){
     switch (action.type) {
         case AUTH_SUCCESS:
             return {...state, mes: '', redictPath: getRedictPath(action.payload),...action.payload}    
-        // case REGISTER_SUCESS:
-        //     return {...state, mes: '', redictPath: getRedictPath(action.payload), isAuth: true,...action.payload}    
-        // case LOGIN_SUCCESS:
-        //     return {...state, mes: '', redictPath: getRedictPath(action.payload), isAuth: true,...action.payload}        
         case ERROR_MSG:
             return {...state, mes: action.payload, isAuth: false}    
         case USER_DATA:
@@ -47,12 +43,7 @@ function authSuc(data) {
         payload: data,
     }
 }
-// function registerSuc(data) {
-//     return {
-//         type: REGISTER_SUCESS,
-//         payload: data,
-//     }
-// }
+
 export function register({user, pwd, type, confirmPwd}) {
 
     if (!user || !pwd || !type) {
@@ -72,12 +63,7 @@ export function register({user, pwd, type, confirmPwd}) {
         })
     }
 }
-// function loginSuc (data) {
-//     return {
-//         type: LOGIN_SUCCESS,
-//         payload: data,
-//     }
-// }
+
 export function login({user, pwd}) {
     if (!user || !pwd) {
         return errorMsg('用户名或密码错误')
@@ -137,10 +123,3 @@ export function toSaveInfo(payload) {
         })
     }
 }
-
-// export function toSaveInfo (payload) {
-//     return {
-//         type: SAVE_INFO,
-//         payload,
-//     }
-// }

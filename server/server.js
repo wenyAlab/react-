@@ -18,5 +18,5 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use('/user', userRouter)
 app.listen(9090, function(){
-    console.log('port 9090')
+    console.log('listen at port 9090')
 })
