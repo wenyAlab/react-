@@ -10,6 +10,7 @@ const initState = {
 }
 
 export function chat(state=initState, action) {
+    console.log(action.type)
     switch (action.type) {
         case USER_LIST:
             return {...state, userList: action.payload};    
@@ -19,16 +20,16 @@ export function chat(state=initState, action) {
 }
 
 function getUserListSuc(payload) {
+    console.log(payload)
     return {
         type: USER_LIST,
-        payload,
+        payload: payload,
     }
 }
 
+
 export function getUserList(type) {
-    console.log(`/user/list?type=${type}`)
     return (dispatch) => {
-        alert('fsaljf')
         axios.get(`/user/list?type=${type}`).then(res => {
             if (res.status === 200) {
                 dispatch(getUserListSuc(res.data.data))

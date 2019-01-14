@@ -73,7 +73,7 @@ export function login({user, pwd}) {
             if(res.status === 200 && res.data.code === 0) {
                 dispatch(authSuc(res.data.data))
             } else {
-                return errorMsg(res.data.message)
+                 dispatch(errorMsg(res.data.message))
             }
         })
     }
@@ -84,23 +84,23 @@ export function UserInfo(userInfo) {
         payload: userInfo,
     }
 }
-export function userload({user, pwd}) {
-    if (!user || !pwd) {
-        return errorMsg('用户名或密码错误')
-    }
-    return (dispatch) => {
-        axios.get('/user/info').then(res => {
-            if (res.status === 200) {
-                // 踩过坑  code应该为0
-                if (res.data.code === 0) {
-                    // 有登陆信息
-                } else {
-                    this.props.history.push('/login')
-                }
-            }
-        })
-    }
-}
+// export function userload({user, pwd}) {
+//     if (!user || !pwd) {
+//         return errorMsg('用户名或密码错误')
+//     }
+//     return (dispatch) => {
+//         axios.get('/user/info').then(res => {
+//             if (res.status === 200) {
+//                 // 踩过坑  code应该为0
+//                 if (res.data.code === 0) {
+//                     dispatch(UserInfo(res.data.data))
+//                 } else {
+//                     this.props.history.push('/login')
+//                 }
+//             }
+//         })
+//     }
+// }
 
 export function avatarSelector (text) {
     return {
@@ -118,7 +118,7 @@ export function toSaveInfo(payload) {
             if(res.status === 200 && res.data.code === 0) {
                 dispatch(authSuc(res.data.data))
             } else {
-                return errorMsg(res.data.message)
+                 dispatch(errorMsg(res.data.message));
             }
         })
     }

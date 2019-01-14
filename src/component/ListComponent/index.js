@@ -12,14 +12,14 @@ class ListComponent extends React.Component{
 
         }
     }
-    componentDidMount() {
-        const { type } = this.props;
-        this.props.queryUserList(type);
-    }
+    // componentDidMount() {
+    //     const { type } = this.props;
+    //     this.props.queryUserList(type);
+    // }
     render() {
-        const { userList } = this.props;
+        const { list } = this.props;
         return (
-            userList ? userList.map(i => (
+            list ? list.map(i => (
                 <React.Fragment key={i._id}>
                     <WhiteSpace size="lg"/>
                         {
