@@ -1,21 +1,13 @@
 import React from 'react';
 import { Card, WhiteSpace } from 'antd-mobile';
-// import axios from 'axios';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import { getUserList } from '../../redux/chat.redux';
 
 class ListComponent extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            list: [],
-
-        }
+    static = {
+        list: PropTypes.array.isRequired,
     }
-    // componentDidMount() {
-    //     const { type } = this.props;
-    //     this.props.queryUserList(type);
-    // }
     render() {
         const { list } = this.props;
         return (

@@ -5,15 +5,13 @@ import { Switch , Route} from 'react-router-dom';
 import TabBarLink from '../../component/TabBarLink';
 import Boss from '../../container/boss';
 import Genius from '../../container/genius';
+import Personal from '../../container/personal';
 
 // const Genius = () => {
 //     return <h2>Genius</h2>
 // }
 const Message = () => {
     return <h2>Message</h2>
-}
-const Personal = () => {
-    return <h2>Personal</h2>
 }
 class DashBoard extends React.Component{
     constructor(props){

@@ -10,7 +10,6 @@ const initState = {
 }
 
 export function chat(state=initState, action) {
-    console.log(action.type)
     switch (action.type) {
         case USER_LIST:
             return {...state, userList: action.payload};    
@@ -20,7 +19,6 @@ export function chat(state=initState, action) {
 }
 
 function getUserListSuc(payload) {
-    console.log(payload)
     return {
         type: USER_LIST,
         payload: payload,

@@ -114,7 +114,6 @@ export function avatarSelector (text) {
 export function toSaveInfo(payload) {
     return (dispatch) => {
         axios.post('/user/saveinfo', payload).then(res => {
-            console.log(payload)
             if(res.status === 200 && res.data.code === 0) {
                 dispatch(authSuc(res.data.data))
             } else {
