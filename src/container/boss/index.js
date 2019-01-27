@@ -19,7 +19,7 @@ class Boss extends React.Component{
     render() {
         const { userList } = this.props;
         return (
-            <ListComponent list={userList} />
+            <ListComponent list={userList} {...this.props} />
         )
     }
 }

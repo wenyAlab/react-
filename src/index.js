@@ -9,6 +9,7 @@ import Login from './container/login/login';
 import Register from './container/register/register';
 import BossInfo from './container/bossInfo/bossInfo';
 import GenuisInfo from './container/genuisinfo/genuisinfo';
+import Message from './container/message';
 import reducers from './reducer';
 import './config'
 import AuthRouter from './component/Auth'
@@ -34,6 +35,7 @@ ReactDOM.render((
                     <Route path="/bossinfo" component={BossInfo}></Route>
                     <Route path="/login" component={Login}></Route>
                     <Route path="/register" component={Register}></Route>
+                    <Route path="/chat:user" component={Message}></Route>
                     <Route  component={DashBoard}></Route>
                 </Switch>
             </div>

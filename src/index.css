@@ -17,9 +17,15 @@ code {
   width: 100%;
   position: fixed;
   bottom: 0;
+  height: auto!important;
 }
 .fix_header .am-navbar {
   width: 100%;
   position: fixed;
   top: 0;
+}
+.chat_message_box {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
 }

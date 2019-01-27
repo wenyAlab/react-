@@ -4,26 +4,15 @@ import { InputItem, List, WingBlank, WhiteSpace, Button, Radio } from 'antd-mobi
 import { register } from '../../redux/user.redux';
 import { Redirect } from 'react-router-dom';
 import Logo from '../../component/logo';
-
+import HandleChange from '../../component/HandleChange';
 const RadioItem = Radio.RadioItem;
 
 class Register extends React.Component{
-    constructor(props){
-        super(props);
-        this.state={
-            user: '',
-            pwd: '',
-            confirmPwd: '',
-            type: 'genius'
-        }
-    }
-    handleChange = (key, value) => {
-        this.setState({
-            [key]: value,
-        })
+    componentDidMount(){
+        this.props.handleChange('type', 'genius')
     }
     register = () => {
-        this.props.registerFn(this.state);
+        this.props.registerFn(this.props.state);
     }
     render(){
         const { redictPath } = this.props.user;
@@ -34,24 +23,24 @@ class Register extends React.Component{
                 <WingBlank>
                     <List>
                         <InputItem
-                            onChange={v => this.handleChange('user', v)}
+                            onChange={v => this.props.handleChange('user', v)}
                         >用户名</InputItem>
                         <WhiteSpace/>
                         <InputItem
-                            onChange={v => this.handleChange('pwd', v)}
+                            onChange={v => this.props.handleChange('pwd', v)}
                             type="password"
                         >密码</InputItem>
                         <InputItem
-                            onChange={v => this.handleChange('confirmPwd', v)}
+                            onChange={v => this.props.handleChange('confirmPwd', v)}
                             type="password"
                         >确认密码</InputItem>
                         <WhiteSpace/>
 
-                        <RadioItem checked={this.state.type === 'genius'}
-                            onChange={() => this.handleChange('type', 'genius')}
+                        <RadioItem checked={this.props.state.type === 'genius'}
+                            onChange={() => this.props.handleChange('type', 'genius')}
                         >求职者</RadioItem>
-                        <RadioItem checked={this.state.type === 'boss'}
-                            onChange={() => this.handleChange('type', 'boss')}
+                        <RadioItem checked={this.props.state.type === 'boss'}
+                            onChange={() => this.props.handleChange('type', 'boss')}
                         >招聘者</RadioItem>
                     </List>
                     {/* <WhiteSpace/>
@@ -73,4 +62,4 @@ const mapDispatchToProps = dispatch => {
         }
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Register);
+export default connect(mapStateToProps, mapDispatchToProps)(HandleChange(Register));

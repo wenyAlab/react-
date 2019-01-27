@@ -8,6 +8,9 @@ class ListComponent extends React.Component{
     static = {
         list: PropTypes.array.isRequired,
     }
+    handleChat = (user) => {
+        this.props.history.push(`/chat:${user}`)
+    }
     render() {
         const { list } = this.props;
         return (
@@ -16,7 +19,11 @@ class ListComponent extends React.Component{
                     <WhiteSpace size="lg"/>
                         {
                             i.avatar &&
-                            <Card full key={i._id}>
+                            <Card
+                                full
+                                key={i._id}
+                                onClick={() => this.handleChat(i.user)}
+                            >
                                 <Card.Header
                                 title={i.user}
                                 thumb={require(`../AvatarSelector/img/${i.avatar}.jpg`)}

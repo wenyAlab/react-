@@ -6,13 +6,9 @@ import TabBarLink from '../../component/TabBarLink';
 import Boss from '../../container/boss';
 import Genius from '../../container/genius';
 import Personal from '../../container/personal';
+import Message from '../../container/message';
 
-// const Genius = () => {
-//     return <h2>Genius</h2>
-// }
-const Message = () => {
-    return <h2>Message</h2>
-}
+
 class DashBoard extends React.Component{
     constructor(props){
         super(props);
@@ -22,6 +18,7 @@ class DashBoard extends React.Component{
     }
     render(){
         const {user } = this.props;
+        const { pathname } = this.props.location;
         const tabList = [
             {
                 path: '/boss',
@@ -55,17 +52,16 @@ class DashBoard extends React.Component{
                 component: Personal,
                 // hide: this.props.user === 'genius',
             },
-        ]
+        ];
         return (
             <div>
                 <NavBar mode="light" className="fix_header">
-                    {tabList.find(v => v.path === this.props.location.pathname).title}
+                    {tabList.find(v => v.path === pathname).title}
                 </NavBar>
                 <div style={{marginTop: 10}}>
                     <Switch>
                     {
                         tabList.map(i => (
-                            // console.log(i.component)
                             <Route key={i.path} path={i.path} component={i.component}></Route>
                         ))
                     }

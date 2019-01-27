@@ -4,6 +4,7 @@ const AUTH_SUCCESS = 'AUTH_SUCCESS';
 const ERROR_MSG = 'ERROR_MSG';
 const USER_DATA = 'USER_DATA';
 const AVATAR_SELECT = 'AVATAR_SELECT';
+const LOGOUT_CLEAR = 'LOGOUT_CLEAR';
 
 /**
  * 此reducer为登录、注册用户reducer
@@ -27,6 +28,8 @@ export function user(state=initState, action){
             return {...state, ...action.payload}    
         case AVATAR_SELECT:
             return {...state, avatar: action.payload}    
+        case LOGOUT_CLEAR:
+            return {...initState, redictPath: '/login'};    
         default:
             return state;
     }
@@ -41,6 +44,12 @@ function authSuc(data) {
     return {
         type: AUTH_SUCCESS,
         payload: data,
+    }
+}
+
+export function signout() {
+    return {
+        type: LOGOUT_CLEAR,
     }
 }
 
