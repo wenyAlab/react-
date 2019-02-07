@@ -1,8 +1,12 @@
 import React from 'react';
+import { InputItem, List, NavBar} from 'antd-mobile';
+import {connect} from 'react-redux';
+import { getChatMessage, sendMessage, receiveMessage } from '../../redux/message.redux';
+import './message.css'
 import ioClient from 'socket.io-client';
-import { InputItem, List} from 'antd-mobile';
 const io = ioClient('ws://localhost:9090')
 
+const Item  = List.Item;
 class Message extends React.Component{
     constructor(props){
         super(props);
@@ -12,11 +16,13 @@ class Message extends React.Component{
         }
     }
     componentDidMount(){
-        io.on('receiveMessage', (data) => {
-            this.setState({
-                messageList: [...this.state.messageList, data.message]
-            })
-        })
+        // io.on('receiveMessage', (data) => {
+        //     this.setState({
+        //         messageList: [...this.state.messageList, data.message]
+        //     })
+        // })
+        // this.props.chatMessageFn();
+        // this.props.receiveMessageFn();
     }
     handleChange = (value) => {
         this.setState({
@@ -24,17 +30,48 @@ class Message extends React.Component{
         })
     }
     handleSubmit = () => {
-        io.emit('sendMessage', {message: this.state.inputValue})
+        // io.emit('sendMessage', {message: this.state.inputValue})
+        const payload = {
+            from: this.props.user._id,
+            to: this.props.match.params.user,
+            message: this.state.inputValue
+        }
+        this.props.sendMessageFn(payload);
         this.setState({
             inputValue: '',
         })
     }
     render() {
+        const {messageList} = this.props.chatMessage;
+        const user = this.props.match.params.user;
+        
         return (
-            <div>
+            <div id="chat_page">
+                <NavBar mode="light">
+                    {this.props.match.params.user}
+                </NavBar>
                 {
-                    this.state.messageList.length > 0 && this.state.messageList.map(i => {
-                        return <p key={i}>{i}</p>
+                    messageList.length > 0 && messageList.map(i => {
+                        return i.from === user ? (
+                            <List key={i._id}>
+                                <Item
+                                    thumb="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"
+                                >
+                                    {i.message}
+                                </Item>
+                            </List>
+                            // <p key={i._id}>对方发来的{i.message}</p>
+                        ) : (
+                            <List key={i._id}>
+                                <Item
+                                    extra={<img src='https://zos.alipayobjects.com/rmsportal/UmbJMbWOejVOpxe.png'/>}
+                                    className="chat_me"
+                                >
+                                    {i.message}
+                                </Item>
+                            </List>
+                        )
+                        // return <p key={i._id}>{i.message}</p>
                     })
                 }
                 <div className='chat_message_box'>
@@ -54,4 +91,21 @@ class Message extends React.Component{
     }
 }
 
-export default Message;
+const mapStateToProps = (state) => ({
+    user: state.user,
+    chatMessage: state.chatMessage,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    // chatMessageFn() {
+    //     dispatch(getChatMessage())
+    // },
+    // receiveMessageFn() {
+    //     dispatch(receiveMessage())
+    // },
+    sendMessageFn(payload) {
+        dispatch(sendMessage(payload))
+    }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Message);

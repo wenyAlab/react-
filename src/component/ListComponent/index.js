@@ -8,8 +8,8 @@ class ListComponent extends React.Component{
     static = {
         list: PropTypes.array.isRequired,
     }
-    handleChat = (user) => {
-        this.props.history.push(`/chat:${user}`)
+    handleChat = (id) => {
+        this.props.history.push(`/chat/${id}`)
     }
     render() {
         const { list } = this.props;
@@ -22,7 +22,7 @@ class ListComponent extends React.Component{
                             <Card
                                 full
                                 key={i._id}
-                                onClick={() => this.handleChat(i.user)}
+                                onClick={() => this.handleChat(i._id)}
                             >
                                 <Card.Header
                                 title={i.user}

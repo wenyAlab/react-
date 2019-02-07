@@ -2,16 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TabBar } from 'antd-mobile';
 import { withRouter } from 'react-router-dom';
-
+import { connect } from 'react-redux';
 
 class TabBarLink extends React.Component{
     static = {
         tabLink: PropTypes.array.isRequired,
+        badge: PropTypes.number,
     }
     onHandlePress = (path) => {
         this.props.history.push(path)
     }
     render(){
+        const { chatMessage } = this.props;
         const { pathname } = this.props.location;
         const tabList = this.props.tabLink.filter(i => !i.hide)
         return (
@@ -19,6 +21,7 @@ class TabBarLink extends React.Component{
                {
                tabList.map(i => (
                    <TabBar.Item
+                    badge={i.path === '/message' && chatMessage.unRead}
                     title={i.text}
                     key={i.path}
                     icon={{uri: require(`./img/${i.icon}_selected.svg`)}}
@@ -34,5 +37,10 @@ class TabBarLink extends React.Component{
         )
     }
 }
+const mapStateToProps = (state) => ({
+    chatMessage: state.chatMessage,
+})
 
-export default withRouter(TabBarLink);
+
+
+export default withRouter(connect(mapStateToProps, null)(TabBarLink));

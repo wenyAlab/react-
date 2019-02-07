@@ -4,9 +4,11 @@ import {connect} from 'react-redux';
 import { Switch , Route} from 'react-router-dom';
 import TabBarLink from '../../component/TabBarLink';
 import Boss from '../../container/boss';
+import { getChatMessage, receiveMessage } from '../../redux/message.redux';
+
 import Genius from '../../container/genius';
 import Personal from '../../container/personal';
-import Message from '../../container/message';
+import MesList from '../../container/mesList';
 
 
 class DashBoard extends React.Component{
@@ -16,8 +18,13 @@ class DashBoard extends React.Component{
 
         }
     }
+    componentDidMount(){
+        this.props.chatMessageFn();
+        this.props.receiveMessageFn();
+    }
     render(){
-        const {user } = this.props;
+        const {user, chatMessage } = this.props;
+        const { unRead } = chatMessage;
         const { pathname } = this.props.location;
         const tabList = [
             {
@@ -38,10 +45,11 @@ class DashBoard extends React.Component{
             },
             {
                 path: '/message',
+                // badge: unRead,
                 text: '消息',
                 icon: 'msg',
                 title: '消息列表',
-                component: Message,
+                component: MesList,
                 // hide: this.props.user === 'genius',
             },
             {
@@ -74,6 +82,15 @@ class DashBoard extends React.Component{
 }
 const mapStateToProps = (state) => ({
     user: state.user,
+    chatMessage: state.chatMessage,
+})
+const mapDispatchToProps = (dispatch) => ({
+    chatMessageFn() {
+        dispatch(getChatMessage())
+    },
+    receiveMessageFn() {
+        dispatch(receiveMessage())
+    },
 })
 
-export default connect(mapStateToProps)(DashBoard);
+export default connect(mapStateToProps,mapDispatchToProps)(DashBoard);

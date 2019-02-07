@@ -1,20 +1,25 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+// userRouter 要提前到model, 已踩坑
+const userRouter = require('./user');
+
+const model = require('./model.js')
+const Chat = model.getModel('chat');
 // io work with express
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
 io.on('connection', function(socket){
-    // console.log('socket connecting');
     socket.on('sendMessage', function(data){
-        console.log(data)
-        io.emit('receiveMessage', data)
+        const { from, to, message} = data;
+        const chat_id = [from,to].sort().join('_');
+        Chat.create({chat_id, from, to, message}, function(err, doc){
+            io.emit('receiveMessage', Object.assign({}, doc._doc));
+        })
     })
 })
-const userRouter = require('./user');
-// const 
 // app.all('*', function(req, res, next) {
 //     res.header("Access-Control-Allow-Origin", "*");
 //     res.header("Access-Control-Allow-Headers", "X-Requested-With");

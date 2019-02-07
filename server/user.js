@@ -3,8 +3,14 @@ const utils = require('utility');
 const Router = express.Router();
 const model = require('./model.js')
 const User = model.getModel('user');
+const Chat = model.getModel('chat');
 
+// console.log(model, )
 const filter = {pwd: 0, _v: 0}
+
+// Chat.remove({}, function(err, doc) {
+
+// })
 Router.get('/list', function(req, res) {
     const { type } = req.query;
     // User.deleteOne({user: 'boss'}, function(err, doc){});
@@ -77,6 +83,25 @@ Router.post('/saveinfo', function(req, res) {
         }, body)
         return res.json({code: 0, data: data})
     })
+})
+
+Router.get('/getMessageList', function(req, res) {
+    // console.log(req.cookies)
+    const user = req.cookies.userid;
+    User.find({}, function(err, docUser) {
+        let users = {};
+        docUser.forEach(i => {
+            users[i._id] = {user: i.user, avatar: i.avatar}
+        })
+
+        Chat.find({'$or': [{from: user}, {to: user}]}, function(err, doc) {
+            if (!err) {
+                return res.json({code: 0, data: doc, users: users})
+            }
+        })
+
+    })
+
 })
 
 function md5Fun (pwd) {
