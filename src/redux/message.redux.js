@@ -19,9 +19,10 @@ const initState = {
 export function chatMessage (state=initState, action) {
     switch(action.type) {
         case MESSAGE_LIST:
-            return {...state, messageList: action.payload.mgsList, users: action.payload.users, unRead: action.payload.mgsList.filter(i => !i.read).length };
+            return {...state, messageList: action.payload.mgsList, users: action.payload.users, unRead: action.payload.mgsList.filter(i => !i.read&&i.to===action.payload.userId).length };
         case MESSAGE_RECEIVE:
-            return {...state, messageList: [...state.messageList, action.payload], unRead: state.unRead + 1};
+            const addNum = action.payload.data.to === action.payload.userId ? 1 : 0;
+            return {...state, messageList: [...state.messageList, action.payload.data], unRead: state.unRead + addNum};
         case MESSAGE_ISREAD:
             return {...state};
         default:
@@ -29,38 +30,44 @@ export function chatMessage (state=initState, action) {
     }
 }
 
-function messageList (mgsList, users) {
+function messageList (mgsList, users, userId) {
     return {
         type: MESSAGE_LIST,
         payload: {
             mgsList,
             users,
+            userId,
         },
     }
 }
 
 export function getChatMessage() {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         Axios.get('/user/getMessageList').then(res => {
             if (res.status === 200 && res.data.code === 0) {
-                dispatch(messageList(res.data.data, res.data.users))
+                const userId = getState().user._id;
+                dispatch(messageList(res.data.data, res.data.users, userId))
             }
         })
     }
 }
 
 export function receiveMessage() {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         io.on('receiveMessage', function(data) {
-            dispatch(sendMessageFn(data))
+            const userId = getState().user._id;
+            dispatch(sendMessageFn(data, userId))
         })
     }
 }
 
-function sendMessageFn(payload) {
+function sendMessageFn(data, userId) {
     return {
         type: MESSAGE_RECEIVE,
-        payload,
+        payload: {
+            data,
+            userId,
+        },
     }
 }
 export function sendMessage(payload) {

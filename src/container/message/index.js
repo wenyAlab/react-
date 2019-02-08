@@ -1,6 +1,7 @@
 import React from 'react';
-import { InputItem, List, NavBar} from 'antd-mobile';
+import { InputItem, List, NavBar, Icon, Grid} from 'antd-mobile';
 import {connect} from 'react-redux';
+import { getChatId } from '../../util';
 import { getChatMessage, sendMessage, receiveMessage } from '../../redux/message.redux';
 import './message.css'
 import ioClient from 'socket.io-client';
@@ -13,6 +14,7 @@ class Message extends React.Component{
         this.state = {
             inputValue: '',
             messageList: [],
+            emojiShow: false,
         }
     }
     componentDidMount(){
@@ -21,8 +23,14 @@ class Message extends React.Component{
         //         messageList: [...this.state.messageList, data.message]
         //     })
         // })
-        // this.props.chatMessageFn();
-        // this.props.receiveMessageFn();
+        const {messageList} = this.props.chatMessage;
+        if (!messageList.length) {
+            this.props.chatMessageFn();
+            this.props.receiveMessageFn();
+        }
+        setTimeout(() => {
+            window.dispatchEvent(new Event('resize'))
+        }, 0);
     }
     handleChange = (value) => {
         this.setState({
@@ -41,37 +49,62 @@ class Message extends React.Component{
             inputValue: '',
         })
     }
+    handleEmoji = () => {
+        this.setState({
+            emojiShow: !this.state.emojiShow,
+        })
+        setTimeout(() => {
+            window.dispatchEvent(new Event('resize'))
+        }, 0);
+    }
+    clickEmoji = (e) => {
+        this.setState({
+            inputValue: this.state.inputValue + e.text,
+        })
+    }
     render() {
-        const {messageList} = this.props.chatMessage;
-        const user = this.props.match.params.user;
-        
+        const emoji = '😃 😂 😍 🥰 🤔 😊 😳 😇 😃 😂 😍 🥰 🤔 😊 😳 😝 🤗 🤭 🤫 🤐 😏 🙄 😬 😌 😔 🤒 😳 🥺 😭 🙂 🤣 😗 😋 😛 😜 🤪 😝 😆'.split(' ')
+                        .filter(v => v)
+                        .map(i => ({text: i}))
+        const {messageList, users} = this.props.chatMessage;
+        const userId = this.props.match.params.user;
+        const { emojiShow } = this.state;
+        // const 
+        if(!users[userId]) {
+            return null;
+        }
+        const chatId = getChatId(userId, this.props.user._id);
+        const finalMesList = messageList.filter(i => i.chat_id === chatId);
         return (
             <div id="chat_page">
-                <NavBar mode="light">
-                    {this.props.match.params.user}
+                <NavBar
+                    mode="light"
+                    icon={<Icon type="left" />}
+                    onLeftClick={() => this.props.history.goBack()}
+                >
+                    {users[userId].user}
                 </NavBar>
                 {
-                    messageList.length > 0 && messageList.map(i => {
-                        return i.from === user ? (
+                    finalMesList.length > 0 && finalMesList.map(i => {
+                        const avatar = require(`./img/${users[i.from].avatar}.jpg`)
+                        return i.from === userId ? (
                             <List key={i._id}>
                                 <Item
-                                    thumb="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"
+                                    thumb={avatar}
                                 >
                                     {i.message}
                                 </Item>
                             </List>
-                            // <p key={i._id}>对方发来的{i.message}</p>
                         ) : (
                             <List key={i._id}>
                                 <Item
-                                    extra={<img src='https://zos.alipayobjects.com/rmsportal/UmbJMbWOejVOpxe.png'/>}
+                                    extra={<img src={avatar} alt="avatar"/>}
                                     className="chat_me"
                                 >
                                     {i.message}
                                 </Item>
                             </List>
                         )
-                        // return <p key={i._id}>{i.message}</p>
                     })
                 }
                 <div className='chat_message_box'>
@@ -79,12 +112,28 @@ class Message extends React.Component{
                         <InputItem
                             value={this.state.inputValue}
                             onChange={(value) => this.handleChange(value)}
-                            placeholder="请输入你的想法"
-                            extra={<span onClick={() => this.handleSubmit()}>发送</span>}
+                            placeholder="请输入你的问题"
+                            extra={
+                            <div>
+                                <span role="img" onClick={() => this.handleEmoji()}>😃</span>
+                                <span style={{marginLeft: '8px'}} onClick={() => this.handleSubmit()}>发送</span>
+                            </div>
+                            }
                         >
 
                         </InputItem>
                     </List>
+                    {
+                        emojiShow &&
+                        <Grid
+                            data={emoji}
+                            isCarousel
+                            columnNum={8}
+                            carouselMaxRow={4}
+                            hasLine={false}
+                            onClick={_el => this.clickEmoji(_el)} 
+                        />
+                    }
                 </div>
             </div>
         )
@@ -97,12 +146,12 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    // chatMessageFn() {
-    //     dispatch(getChatMessage())
-    // },
-    // receiveMessageFn() {
-    //     dispatch(receiveMessage())
-    // },
+    chatMessageFn() {
+        dispatch(getChatMessage())
+    },
+    receiveMessageFn() {
+        dispatch(receiveMessage())
+    },
     sendMessageFn(payload) {
         dispatch(sendMessage(payload))
     }

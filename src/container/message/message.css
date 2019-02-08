@@ -5,3 +5,10 @@
     text-align: right;
     padding-right: 14px;
 }
+#chat_page .am-grid-icon {
+    display: none;
+}
+#chat_page .am-grid-text {
+    font-size: 18px;
+    margin-top: 0px;
+}
