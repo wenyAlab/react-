@@ -2,10 +2,11 @@ import React from 'react';
 import { InputItem, List, NavBar, Icon, Grid} from 'antd-mobile';
 import {connect} from 'react-redux';
 import { getChatId } from '../../util';
-import { getChatMessage, sendMessage, receiveMessage } from '../../redux/message.redux';
+import { getChatMessage, sendMessage, receiveMessage,readMessage } from '../../redux/message.redux';
 import './message.css'
-import ioClient from 'socket.io-client';
-const io = ioClient('ws://localhost:9090')
+// import DefaultAvatar from './img/avatar.svg';
+// import ioClient from 'socket.io-client';
+// const io = ioClient('ws://localhost:9090')
 
 const Item  = List.Item;
 class Message extends React.Component{
@@ -15,19 +16,17 @@ class Message extends React.Component{
             inputValue: '',
             messageList: [],
             emojiShow: false,
+            listMargin: 100,
         }
     }
     componentDidMount(){
-        // io.on('receiveMessage', (data) => {
-        //     this.setState({
-        //         messageList: [...this.state.messageList, data.message]
-        //     })
-        // })
         const {messageList} = this.props.chatMessage;
         if (!messageList.length) {
             this.props.chatMessageFn();
             this.props.receiveMessageFn();
         }
+        const to = this.props.match.params.user;
+        this.props.readMessageFn(to);
         setTimeout(() => {
             window.dispatchEvent(new Event('resize'))
         }, 0);
@@ -52,6 +51,7 @@ class Message extends React.Component{
     handleEmoji = () => {
         this.setState({
             emojiShow: !this.state.emojiShow,
+            listMargin: this.state.listMargin === 100 ? 300 : 100,
         })
         setTimeout(() => {
             window.dispatchEvent(new Event('resize'))
@@ -68,9 +68,9 @@ class Message extends React.Component{
                         .map(i => ({text: i}))
         const {messageList, users} = this.props.chatMessage;
         const userId = this.props.match.params.user;
-        const { emojiShow } = this.state;
+        const { emojiShow, listMargin } = this.state;
         // const 
-        if(!users[userId]) {
+        if(!(users&&users[userId]&&users[userId])) {
             return null;
         }
         const chatId = getChatId(userId, this.props.user._id);
@@ -82,31 +82,33 @@ class Message extends React.Component{
                     icon={<Icon type="left" />}
                     onLeftClick={() => this.props.history.goBack()}
                 >
-                    {users[userId].user}
+                    {users&&users[userId]&&users[userId].user}
                 </NavBar>
-                {
-                    finalMesList.length > 0 && finalMesList.map(i => {
-                        const avatar = require(`./img/${users[i.from].avatar}.jpg`)
-                        return i.from === userId ? (
-                            <List key={i._id}>
-                                <Item
-                                    thumb={avatar}
-                                >
-                                    {i.message}
-                                </Item>
-                            </List>
-                        ) : (
-                            <List key={i._id}>
-                                <Item
-                                    extra={<img src={avatar} alt="avatar"/>}
-                                    className="chat_me"
-                                >
-                                    {i.message}
-                                </Item>
-                            </List>
-                        )
-                    })
-                }
+                <div style={{marginBottom:listMargin}}>
+                    {
+                        finalMesList.length > 0 && finalMesList.map(i => {
+                            const avatar = users&&users[i.from]&&users[i.from].avatar && require(`./img/${users[i.from].avatar}.jpg`);
+                            return i.from === userId ? (
+                                <List key={i._id}>
+                                    <Item
+                                        thumb={avatar}
+                                    >
+                                        {i.message}
+                                    </Item>
+                                </List>
+                            ) : (
+                                <List key={i._id}>
+                                    <Item
+                                        extra={<img src={avatar} alt="avatar"/>}
+                                        className="chat_me"
+                                    >
+                                        {i.message}
+                                    </Item>
+                                </List>
+                            )
+                        })
+                    }
+                </div>
                 <div className='chat_message_box'>
                     <List>
                         <InputItem
@@ -154,6 +156,9 @@ const mapDispatchToProps = (dispatch) => ({
     },
     sendMessageFn(payload) {
         dispatch(sendMessage(payload))
+    },
+    readMessageFn(payload) {
+        dispatch(readMessage(payload))
     }
 })
 

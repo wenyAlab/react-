@@ -12,19 +12,22 @@ const MESSAGE_ISREAD = 'MESSAGE_ISREAD';
 const initState = {
     messageList: [],
     // is_read: false,
-    users: {},
+    users: null,
     unRead: 0,
 }
 
 export function chatMessage (state=initState, action) {
     switch(action.type) {
         case MESSAGE_LIST:
-            return {...state, messageList: action.payload.mgsList, users: action.payload.users, unRead: action.payload.mgsList.filter(i => !i.read&&i.to===action.payload.userId).length };
+            return {...state, messageList: action.payload.mgsList, users: action.payload.users, unRead: action.payload.mgsList.filter(i => !i.is_read&&i.to===action.payload.userId).length };
         case MESSAGE_RECEIVE:
             const addNum = action.payload.data.to === action.payload.userId ? 1 : 0;
             return {...state, messageList: [...state.messageList, action.payload.data], unRead: state.unRead + addNum};
         case MESSAGE_ISREAD:
-            return {...state};
+            return {...state, messageList: state.messageList.map(i => {
+                i.read = true;
+                return i;
+            }), unRead: state.unRead-action.payload.readNum};
         default:
             return state;
     }
@@ -60,6 +63,16 @@ export function receiveMessage() {
         })
     }
 }
+function MessageRead({from, to, readNum}) {
+    return {
+        type: MESSAGE_ISREAD,
+        payload: {
+            from,
+            to,
+            readNum,
+        }
+    }
+}
 
 function sendMessageFn(data, userId) {
     return {
@@ -78,6 +91,17 @@ export function sendMessage(payload) {
         //         dispatch(sendMessageFn(res.data.data))
         //     }
         // })
+    }
+}
+// 这里的payload其实是from，即来自哪个人
+export function readMessage(from) {
+    return (dispatch, getState) => {
+        Axios.post('/user/readMsg', {from}).then(res => {
+            const userId = getState().user._id;
+            if(res.status === 200 && res.data.code === 0) {
+                dispatch(MessageRead({userId, from, readNum:res.data.num}))
+            }
+        })
     }
 }
 

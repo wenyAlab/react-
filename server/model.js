@@ -26,7 +26,7 @@ const models = {
     chat: {
         'from': {'type': String, 'require': true},
         'to': {'type': String, 'require': true},
-        'create_time': {'type': Date, 'require': true, 'default': new Date().getTime()},
+        'create_time': {'type': Date, 'require': true, 'default': Date.now()},
         'message': {'type': String, 'require': true, 'default': ''},
         'is_read': {'type': Boolean, 'require': true, 'default': false},
         'chat_id': {'type': String, 'require': true},

@@ -103,6 +103,17 @@ Router.get('/getMessageList', function(req, res) {
     })
 
 })
+Router.post('/readMsg', function(req, res) {
+    const userid = req.cookies.userid;
+    const {from } = req.body;
+    Chat.update({from, to: userid}, {'$set': {is_read: true}},{multi: true}, function(err, doc){
+        console.log(doc)
+        if (!err) {
+            return res.json({code: 0, num: doc.nModified})
+        }
+        return res.json({code: 1, data: 'update failed'})
+    })
+})
 
 function md5Fun (pwd) {
     const salt = 'zheshi_react_13yyyDDDfkdsja_okIl';
